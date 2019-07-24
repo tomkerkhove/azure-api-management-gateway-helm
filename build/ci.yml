@@ -1,0 +1,77 @@
+name: $(Date:yyyyMMdd)$(Rev:.r)
+resources:
+- repo: self
+trigger:
+- master
+pr:
+  branches:
+    include:
+    - master
+  paths:
+    include:
+    - build/ci.yml
+    - charts/azure-api-management-federated-gateway/*
+variables:
+  Helm.Chart.Version: '0.0.0-$(Build.BuildNumber)'
+  Helm.Chart.Name: 'azure-api-management-federated-gateway'
+stages:
+- stage: Helm
+  displayName: Helm Chart
+  jobs:
+   - job: HelmChart
+     displayName: Lint, Package & Push Chart
+     condition: succeeded()
+     pool:
+       vmImage: ubuntu-16.04
+     steps:
+     - task: HelmInstaller@0
+       inputs:
+        helmVersion: '2.9.1'
+     - powershell: |
+         $prNumber = '$(System.PullRequest.PullRequestNumber)'
+         $buildNumber = '$(Build.BuildNumber)'
+         Write-Host "Initial build number: '$buildNumber'"
+         Write-Host "PR Number '$prNumber'"
+         $buildNumber = 'PR$(System.PullRequest.PullRequestNumber)'
+         Write-Host "##vso[build.updatebuildnumber]$buildNumber"
+         Write-Host "Build number is '$buildNumber'"
+       displayName: 'Change Build Number to PR format'
+       condition: eq(variables['Build.Reason'], 'PullRequest')
+     - powershell: |
+        helm lint $(Helm.Chart.Name)/ --strict
+       workingDirectory: charts
+       displayName: 'Lint Helm Chart'
+     - powershell: |
+        echo 'Copying Chart folder'
+        cp $(Helm.Chart.Name)/ $chartName/ -r
+
+        echo 'Changing name of chart'
+        ((Get-Content -path $chartName/Chart.yaml -Raw) -replace 'azure-api-management-federated-gateway', $chartName) | Set-Content -Path $chartName/Chart.yaml
+
+        echo 'Outputting transformed content'
+        Get-Content -path $chartName/Chart.yaml -Raw
+       displayName: 'Transform Helm Chart in CI Chart'
+       workingDirectory: 'charts'
+     - powershell: |
+        echo 'Creating output folder'
+        mkdir output/
+
+        echo 'Packaging chart'
+        helm package $chartName/ --app-version $chartVersion --version $chartVersion --destination output/
+       displayName: 'Package Helm Chart'
+       workingDirectory: 'charts'
+     - task: AzureCLI@1
+       displayName: 'Push Helm Chart to Azure Container Registry'
+       inputs:
+        azureSubscription: 'Visual Studio Enterprise (0f9d7fea-99e8-4768-8672-06a28514f77e)'
+        scriptLocation: inlineScript
+        inlineScript: |
+         az configure --defaults acr=tomkerkhove
+         az acr helm push --name tomkerkhove charts/output/$(Helm.Chart.Name)-$(Helm.Chart.Version).tgz --force
+       condition: eq(variables['Build.Reason'], 'PullRequest')
+     - task: PublishBuildArtifacts@1
+       displayName: 'Publish Helm Chart'
+       inputs:
+        PathtoPublish: charts/output/$(Helm.Chart.Name)-$(Helm.Chart.Version).tgz
+        ArtifactName: helm
+       condition: eq(variables['Build.Reason'], 'PullRequest')
