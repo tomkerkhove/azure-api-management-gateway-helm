@@ -58,7 +58,7 @@ stages:
         mkdir output/
 
         echo 'Packaging chart'
-        helm package $(Helm.Chart.CI.Name)/ --app-version $chartVersion --version $chartVersion --destination output/
+        helm package $(Helm.Chart.CI.Name)/ --app-version '$(Helm.Chart.Version)' --version '$(Helm.Chart.Version)' --destination output/
        displayName: 'Package Helm Chart'
        workingDirectory: 'charts'
      - task: AzureCLI@1
