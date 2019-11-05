@@ -1,12 +1,12 @@
 {{- if .Values.ingress.enabled -}}
-{{- $fullName := include "azure-api-management-federated-gateway.fullname" . -}}
+{{- $fullName := include "azure-api-management-gateway.fullname" . -}}
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
   name: {{ $fullName }}
   labels:
-    app.kubernetes.io/name: {{ include "azure-api-management-federated-gateway.name" . }}
-    helm.sh/chart: {{ include "azure-api-management-federated-gateway.chart" . }}
+    app.kubernetes.io/name: {{ include "azure-api-management-gateway.name" . }}
+    helm.sh/chart: {{ include "azure-api-management-gateway.chart" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
   {{- with .Values.ingress.annotations }}

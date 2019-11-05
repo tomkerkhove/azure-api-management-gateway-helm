@@ -10,11 +10,11 @@ pr:
   paths:
     include:
     - build/ci.yml
-    - charts/azure-api-management-federated-gateway/*
+    - charts/azure-api-management-gateway/*
 variables:
   Helm.Chart.Version: '0.0.0-$(Build.BuildNumber)'
-  Helm.Chart.Name: 'azure-api-management-federated-gateway'
-  Helm.Chart.CI.Name: 'azure-api-management-federated-gateway-ci'
+  Helm.Chart.Name: 'azure-api-management-gateway'
+  Helm.Chart.CI.Name: 'azure-api-management-gateway-ci'
 stages:
 - stage: Helm
   displayName: Helm Chart
@@ -47,7 +47,7 @@ stages:
         cp $(Helm.Chart.Name)/ $(Helm.Chart.CI.Name)/ -r
 
         echo 'Changing name of chart'
-        ((Get-Content -path $(Helm.Chart.CI.Name)/Chart.yaml -Raw) -replace 'azure-api-management-federated-gateway', '$(Helm.Chart.CI.Name)') | Set-Content -Path $(Helm.Chart.CI.Name)/Chart.yaml
+        ((Get-Content -path $(Helm.Chart.CI.Name)/Chart.yaml -Raw) -replace 'azure-api-management-gateway', '$(Helm.Chart.CI.Name)') | Set-Content -Path $(Helm.Chart.CI.Name)/Chart.yaml
 
         echo 'Outputting transformed content'
         Get-Content -path $(Helm.Chart.CI.Name)/Chart.yaml -Raw
