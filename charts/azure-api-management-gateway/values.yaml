@@ -5,8 +5,8 @@
 replicaCount: 1
 
 image:
-  repository: nginx
-  tag: stable
+  repository: mcr.microsoft.com/azure-api-management/gateway
+  tag: beta
   pullPolicy: IfNotPresent
 
 nameOverride: ""
@@ -14,7 +14,11 @@ fullnameOverride: ""
 
 service:
   type: ClusterIP
-  port: 80
+  port: 88
+
+gateway:
+  endpoint: 
+  authKey: 
 
 ingress:
   enabled: false
