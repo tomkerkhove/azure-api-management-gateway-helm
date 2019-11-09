@@ -39,11 +39,10 @@ stages:
        displayName: 'Change Build Number to PR format'
        condition: eq(variables['Build.Reason'], 'PullRequest')
      - powershell: |
-        helm lint $(Helm.Chart.Name)/ --strict
-       workingDirectory: charts
-       displayName: 'Lint Helm Chart'
-     - powershell: |
         copy LICENSE charts/$(Helm.Chart.Name)/
+       displayName: 'Copy License to Helm Chart'
+     - powershell: |
+        helm lint $(Helm.Chart.Name)/ --strict
        workingDirectory: charts
        displayName: 'Lint Helm Chart'
      - powershell: |
