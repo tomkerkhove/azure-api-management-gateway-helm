@@ -43,6 +43,10 @@ stages:
        workingDirectory: charts
        displayName: 'Lint Helm Chart'
      - powershell: |
+        copy LICENSE charts/$(Helm.Chart.Name)/
+       workingDirectory: charts
+       displayName: 'Lint Helm Chart'
+     - powershell: |
         echo 'Copying Chart folder'
         cp $(Helm.Chart.Name)/ $(Helm.Chart.CI.Name)/ -r
 
