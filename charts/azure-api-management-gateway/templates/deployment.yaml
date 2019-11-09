@@ -25,16 +25,18 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http
-              containerPort: 80
-              protocol: TCP
-          livenessProbe:
-            httpGet:
-              path: /
-              port: http
-          readinessProbe:
-            httpGet:
-              path: /
-              port: http
+              containerPort: 8080
+            - name: https
+              containerPort: 8081
+          env:
+          - name: config.service.auth
+            valueFrom:
+              secretKeyRef:
+                name: {{ include "azure-api-management-gateway.fullname" . }}
+                key: gateway-key
+          envFrom:
+          - configMapRef:
+              name: {{ include "azure-api-management-gateway.fullname" . }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}
