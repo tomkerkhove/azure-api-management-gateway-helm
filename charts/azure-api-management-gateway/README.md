@@ -18,7 +18,8 @@ It will automatically federate itself with the configured Azure API Management i
 ## Prerequisites
 
 - Azure Subscription
-- Azure API Management instance which supports self-hosted gateways
+- Azure API Management instance
+    - A provisioned [self-hosted gateway](https://docs.microsoft.com/en-us/azure/api-management/api-management-howto-provision-self-hosted-gateway)
 
 ## Installing the Chart
 
