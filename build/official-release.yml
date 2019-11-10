@@ -47,7 +47,7 @@ stages:
      - task: GitHubRelease@0
        displayName: 'Create GitHub Release'
        inputs:
-         gitHubConnection: 'Tom Kerkhove (GitHub - OAuth)'
+         gitHubConnection: 'GitHub'
          repositoryName: tomkerkhove/azure-api-management-gateway-helm
          action: Create
          tagSource: manual
