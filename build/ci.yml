@@ -58,12 +58,12 @@ stages:
        workingDirectory: 'charts'
      - powershell: |
         echo 'Creating output folder'
-        mkdir output/
+        mkdir output/$(Helm.Chart.CI.Folder)/
 
         echo 'Packaging chart'
         helm package $(Helm.Chart.CI.Name)/ --app-version '$(Helm.Chart.Version)' --version '$(Helm.Chart.Version)' --destination output/
        displayName: 'Package Helm Chart'
-       workingDirectory: 'charts/$(Helm.Chart.CI.Folder)/'
+       workingDirectory: 'charts/'
      - task: AzureCLI@1
        displayName: 'Push Helm Chart to Azure Container Registry'
        inputs:
