@@ -44,7 +44,7 @@ stages:
        displayName: 'Lint Helm Chart'
      - powershell: |
         echo 'Copying Chart folder'
-        mkdir $(Helm.Chart.CI.Name)/
+        mkdir oss/
         cp $(Helm.Chart.Name)/ $(Helm.Chart.CI.Name)/ -r
 
         echo 'Changing name of chart'
