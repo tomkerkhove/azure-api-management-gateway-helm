@@ -27,9 +27,9 @@ It will automatically federate itself with the configured Azure API Management i
 To install the chart with the release name `azure-api-management-gateway`:
 
 ```console
-$ helm install --name azure-api-management-gateway tomkerkhove/azure-api-management-gateway \
-               --set gateway.endpoint='<gateway-url>' \
-               --set gateway.authKey='<gateway-key>'
+helm install --name azure-api-management-gateway tomkerkhove/azure-api-management-gateway \
+             --set gateway.endpoint='<gateway-url>' \
+             --set gateway.authKey='<gateway-key>'
 ```
 
 The command deploys the [Azure API Management gateway](https://docs.microsoft.com/en-us/azure/api-management/self-hosted-gateway-overview) on the Kubernetes cluster.
