@@ -14,7 +14,7 @@ pr:
 variables:
   Helm.Chart.Version: '0.0.0-$(Build.BuildNumber)'
   Helm.Chart.Name: 'azure-api-management-gateway'
-  Helm.Chart.CI.Name: 'azure-api-management-gateway-ci'
+  Helm.Chart.CI.Name: 'oss/azure-api-management-gateway-ci'
 stages:
 - stage: Helm
   displayName: Helm Chart
