@@ -15,7 +15,7 @@ variables:
   Helm.Chart.Version: '0.0.0-$(Build.BuildNumber)'
   Helm.Chart.Name: 'azure-api-management-gateway'
   Helm.Chart.CI.Name: 'azure-api-management-gateway-ci'
-  Helm.Chart.CI.Folder: 'oss'
+  Helm.Chart.CI.Folder: 'azure-api-management-gateway'
 stages:
 - stage: Helm
   displayName: Helm Chart
@@ -57,11 +57,11 @@ stages:
        displayName: 'Transform Helm Chart in CI Chart'
        workingDirectory: 'charts'
      - powershell: |
-        echo 'Creating output folder'
+        echo 'Creating output folder to output/$(Helm.Chart.CI.Folder)/'
         mkdir output/$(Helm.Chart.CI.Folder)/
 
         echo 'Packaging chart'
-        helm package $(Helm.Chart.CI.Name)/ --app-version '$(Helm.Chart.Version)' --version '$(Helm.Chart.Version)' --destination output/
+        helm package $(Helm.Chart.CI.Name)/ --app-version '$(Helm.Chart.Version)' --version '$(Helm.Chart.Version)' --destination output/$(Helm.Chart.CI.Folder)/
        displayName: 'Package Helm Chart'
        workingDirectory: 'charts/'
      - task: AzureCLI@1
